@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MFUMO WA MATOKEO - WILAYA YA KALAMBO</title>
+<!-- XLSX IMEONDOLEWA - Mfumo sasa unafanya kazi OFFLINE 100% -->
+<script>
+// Kama huna internet, tumia CSV tu - inafanya kazi bila XLSX
+if(typeof XLSX === "undefined"){ window.XLSX = null; }
+</script>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,Arial;background:#f1f5f9;color:#111;line-height:1.5}
+header{background:linear-gradient(90deg,#0f172a,#1e40af,#0ea5e9);color:#fff;padding:14px 20px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20}
+.header-center{flex:1;text-align:center;line-height:1.2}
+.header-center b{font-size:26px;letter-spacing:1px;display:block}
+.header-center span{font-size:18px;font-weight:800;letter-spacing:2px;display:block;color:#bfdbfe}
+.header-center small{opacity:.85;font-size:12px}
+.header-right{display:flex;align-items:center;justify-content:flex-end;width:60px}
+.header-right .avatar{cursor:pointer;border:3px solid #fff}
+nav{display:flex;gap:10px;flex-wrap:wrap;background:#fff;padding:14px 18px;position:sticky;top:76px;z-index:19;border-bottom:2px solid #e2e8f0}
+nav button{border:1px solid #cbd5e1;background:#f8fafc;padding:11px 16px;border-radius:999px;cursor:pointer;font-weight:700}
+nav button.active{background:#2563eb;color:#fff;border-color:#2563eb}
+main{padding:28px 18px 60px;max-width:1280px;margin:auto}
+.section-block{background:#fff;border-left:6px solid #2563eb;border-radius:0 14px 14px 0;padding:24px;margin-bottom:32px}
+.section-block.blue{border-left-color:#2563eb;background:#eff6ff}
+.section-block.orange{border-left-color:#ea580c;background:#fff7ed}
+.section-block.green{border-left-color:#16a34a;background:#f0fdf4}
+.section-block.purple{border-left-color:#7c3aed;background:#f5f3ff}
+.section-block.pink{border-left-color:#db2777;background:#fdf2f8}
+.section-block.teal{border-left-color:#0d9488;background:#f0fdfa}
+.section-block.yellow{border-left-color:#eab308;background:#fefce8}
+.section-block.slate{border-left-color:#475569;background:#f8fafc}
+.section-title{display:flex;align-items:center;gap:10px;font-size:20px;font-weight:900;margin:0 0 6px}
+.section-title span.icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;background:#fff;flex-shrink:0}
+.section-desc{color:#475569;font-size:13px;margin:0 0 18px}
+.divider{height:2px;background:linear-gradient(90deg,transparent,#cbd5e1,transparent);margin:36px 0;border:none}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:20px}
+.stat{background:#fff;border:1px solid #e2e8f0;border-radius:14px;padding:18px}
+.stat b{font-size:28px}
+label{font-size:13px;font-weight:700;display:block;margin:14px 0 6px}
+input,select{width:100%;padding:12px;border:1px solid #cbd5e1;border-radius:10px;font-size:15px;background:#fff}
+.btn{background:#2563eb;color:#fff;border:none;padding:12px 18px;border-radius:10px;font-weight:800;cursor:pointer}
+.btn.green{background:#16a34a}.btn.red{background:#dc2626}.btn.orange{background:#ea580c}.btn.purple{background:#7c3aed}.btn.ghost{background:#e2e8f0;color:#111}
+.btn.small{padding:8px 12px;font-size:12px}.btn.big{padding:15px 20px;font-size:16px;width:100%}
+.row{display:flex;gap:18px;flex-wrap:wrap;align-items:end}.row>*{flex:1;min-width:160px}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:14px;background:#fff;border-radius:10px;overflow:hidden}
+th,td{border-bottom:1px solid #e2e8f0;padding:11px;text-align:left}th{background:#f8fafc}
+.kata-group{margin-top:22px;border:1px solid #e2e8f0;border-radius:12px;overflow:hidden}
+.kata-group-head{background:#1e40af;color:#fff;padding:12px 14px;display:flex;justify-content:space-between;align-items:center}
+.kata-group-head b{font-size:15px}
+.kata-group-head small{opacity:.85}
+.badge{padding:4px 9px;border-radius:999px;font-weight:800;font-size:11px}
+.A{background:#dcfce7}.B{background:#dbeafe}.C{background:#fef9c3}.D{background:#ffedd5}.F{background:#fee2e2}
+.small{font-size:12px;color:#64748b}.flex{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+.hidden{display:none}
+.editBox{background:#fffbeb;border:1px solid #f59e0b;border-radius:12px;padding:14px;margin-top:14px}
+.importBox{background:#eff6ff;border:2px dashed #2563eb;border-radius:12px;padding:16px;margin-top:18px}
+.importMarksBox{background:#ecfdf5;border:2px dashed #16a34a;border-radius:12px;padding:16px;margin-top:18px}
+.kpi{display:flex;gap:12px;flex-wrap:wrap}.kpi div{background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:10px 14px}
+.avatar{width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid #fff;background:#fff;display:flex;align-items:center;justify-content:center;font-size:28px;overflow:hidden;flex-shrink:0}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.avatar.small{width:48px;height:48px;font-size:20px}
+.avatar.large{width:110px;height:110px;font-size:50px;border:4px solid #2563eb}
+#loginScreen{position:fixed;inset:0;z-index:100;padding:16px;background:linear-gradient(135deg,#0f172a,#1e40af,#0ea5e9);display:flex;align-items:center;justify-content:center}
+.loginCard{background:rgba(255,255,255,.97);border-radius:28px;padding:36px 30px 28px;width:100%;max-width:440px;text-align:center;box-shadow:0 30px 60px rgba(0,0,0,.35)}
+.loginCard h1{margin:14px 0 4px;font-size:26px;text-align:center}
+.loginCard p.sub{color:#64748b;margin:0 0 18px;text-align:center}
+.loginInfo{background:#f8fafc;border-radius:12px;padding:12px;text-align:left;font-size:12px;margin-top:14px;border:1px solid #e2e8f0}
+@media print{body *{visibility:hidden}#printArea,#printArea *{visibility:visible}#printArea{position:absolute;left:0;top:0;width:100%;padding:20px}nav,header,main section:not(#printArea){display:none!important}}
+</style>
+</head>
+<body>
+<script>
+// LOGIN YA DHARURA - Iko juu ili isipotee hata kama code ya chini imekatika
+function doLogin(){
+  var n = document.getElementById("loginName").value.trim().toLowerCase();
+  var e = document.getElementById("loginEmail").value.trim().toLowerCase();
+  var p = document.getElementById("loginPass").value;
+  // Password ya dharura - inafanya kazi hata kama DB haikupakia
+  if(n==="promise daud" && e==="kalambo@gmail.com" && p==="kalambo"){
+    localStorage.setItem("KALAMBO_LOGGED","1");
+    document.getElementById("loginScreen").style.display="none";
+    alert("✅ Umeingia!");
+    location.reload();
+  } else {
+    alert("❌ Si sahihi. Tumia: Promise daud / kalambo@gmail.com / kalambo");
+  }
+}
+function togglePass(){
+  var el = document.getElementById("loginPass");
+  el.type = (el.type==="password") ? "text" : "password";
+}
+function resetLogin(){
+  localStorage.removeItem("KALAMBO_LOGGED");
+  document.getElementById("loginName").value="Promise daud";
+  document.getElementById("loginEmail").value="kalambo@gmail.com";
+  document.getElementById("loginPass").value="kalambo";
+  alert("Login imereset");
+}
+</script>
+<div id="loginScreen">
+<div class="loginCard">
+<div style="margin:-70px auto 0;width:110px;height:110px;"><div id="loginAvatar" class="avatar large" data-avatar>🎓</div></div>
+<h1>MFUMO WA MATOKEO<br>WILAYA YA KALAMBO</h1>
+<p class="sub">Ingia kama Admin</p>
+<label style="text-align:left;">Jina la Admin</label>
+<input id="loginName" value="Promise daud">
+<label style="text-align:left;">Email</label>
+<input id="loginEmail" value="kalambo@gmail.com">
+<label style="text-align:left;">Password</label>
+<input id="loginPass" type="password" value="kalambo">
+<div style="display:flex;gap:8px;margin-top:10px;">
+<button class="btn ghost small" onclick="togglePass()" style="flex:1;">👁 Onyesha Password</button>
+<button class="btn ghost small" onclick="resetLogin()" style="flex:1;">🔄 Reset</button>
+</div>
+<button class="btn big" style="margin-top:16px;" onclick="doLogin()">🔐 Ingia Kwenye Mfumo</button>
+<p id="loginError" style="color:#dc2626;font-weight:700;"></p>
+<p id="loginOk" style="color:#16a34a;font-weight:700;"></p>
+<div class="loginInfo"><b>Taarifa:</b><br>Jina: Promise daud<br>Email: kalambo@gmail.com<br>Password: kalambo</div>
+</div>
+</div>
+<header>
+<div style="width:60px;"></div>
+<div class="header-center"><b>MFUMO WA MATOKEO</b><span>WILAYA YA KALAMBO</span><small>Tarafa • Kata • Shule • Darasa I - VII</small></div>
+<div class="header-right"><div id="headerAvatar" class="avatar small" data-avatar onclick="goProfile()" title="Wasifu">👤</div></div>
+</header>
+<nav>
+<button class="active" onclick="show('dash',this)">📊 Dashboard</button>
+<button onclick="show('reg1',this)">📝 Page 1</button>
+<button onclick="show('reg2',this)">👩🏾‍🎓 Page 2</button>
+<button onclick="show('results',this)">📋 Matokeo</button>
+<button onclick="show('schoolView',this)">🏫 Shule</button>
+<button onclick="show('rank',this)">🏆 Top 10</button>
+<button onclick="show('subjects',this)">📚 Masomo</button>
+<button onclick="show('backupPage',this)">💾 Backup</button>
+<button onclick="show('profilePage',this)">👤 Wasifu</button>
+</nav>
+<main>
+<section id="dash">
+<div class="section-block blue">
+<div class="section-title"><span class="icon">👋</span> Karibu</div>
+<div style="display:flex;gap:16px;align-items:center;"><div class="avatar" data-avatar>👤</div><div><b id="dashAdminName">Promise daud</b><br><small id="dashAdminEmail">kalambo@gmail.com</small></div></div>
+</div>
+<hr class="divider">
+<div class="section-block slate">
+<div class="section-title"><span class="icon">📊</span> Chagua Mwaka na Darasa</div>
+<div class="row">
+<div><label>Mwaka *</label><select id="dashYear" onchange="renderDash()"></select></div>
+<div><label>Darasa</label><select id="dashClass" onchange="renderDash()"><option value="">Darasa Zote</option><option>Darasa I</option><option>Darasa II</option><option>Darasa III</option><option>Darasa IV</option><option>Darasa V</option><option>Darasa VI</option><option>Darasa VII</option></select></div>
+<div><label>Backup</label><button class="btn green" onclick="exportBackup()">⬇ Pakua Backup</button></div>
+</div>
+</div>
+<div class="grid" id="dashStats"></div><br>
+<div class="section-block teal"><div class="section-title"><span class="icon">📈</span> Muhtasari</div><div id="dashSummary"></div></div>
+<div class="section-block purple"><div class="section-title"><span class="icon">📍</span> Tarafa</div><div id="dashByClass"></div></div>
+</section>
+  
+<section id="reg1" style="display:none;">
+<div class="section-block yellow">
+<div class="section-title"><span class="icon">📅</span> Mwaka wa Masomo</div>
+<p class="section-desc">Mwaka ukibadilika, ongeza Mwaka mpya hapa. Data za zamani hazifutwi.</p>
+<div class="row">
+<div><label>Mwaka Mpya (Mf: 2027)</label><input id="newYear" placeholder="2027" type="number"></div>
+<div><label>&nbsp;</label><button class="btn" onclick="addYear()">+ Ongeza Mwaka</button></div>
+<div><label>Mwaka Unaotumika</label><select id="activeYearSelect" onchange="setActiveYear(this.value)"></select></div>
+</div>
+<div id="yearList"></div>
+</div>
+<hr class="divider">
+<div class="section-block orange">
+<div class="section-title"><span class="icon">📍</span> 1. Sajili Tarafa</div>
+<p class="section-desc">Ukishajaza, inatokea chini hapo hapo - bila refresh.</p>
+<div class="row"><div><label>Jina la Tarafa</label><input id="tarafaName" placeholder="Mf: Mambwe"></div><div><label>&nbsp;</label><button class="btn" onclick="addTarafa()">+ Ongeza Tarafa</button></div></div>
+<div id="tarafaList"></div><div id="editTarafaBox"></div>
+</div>
+<div class="section-block green">
+<div class="section-title"><span class="icon">📌</span> 2. Sajili Kata - Zimepangwa kwa Tarafa</div>
+<p class="section-desc">Kila Tarafa ina Kata zake chini yake.</p>
+<div class="row"><div><label>Chagua Tarafa</label><select id="kataTarafa"></select></div><div><label>Jina la Kata</label><input id="kataName" placeholder="Mf: Mambwe"></div><div><label>&nbsp;</label><button class="btn" onclick="addKata()">+ Ongeza Kata</button></div></div>
+<div id="kataList"></div><div id="editKataBox"></div>
+</div>
+<div class="section-block blue">
+<div class="section-title"><span class="icon">🏫</span> 3. Sajili Shule - Zimepangwa kwa Kata</div>
+<p class="section-desc">Kila Kata ina Shule zake chini yake. Ukichagua Kata, unaona Shule zake tu.</p>
+<div class="row"><div><label>Chagua Kata</label><select id="shuleKata"></select></div><div><label>Jina la Shule</label><input id="shuleName" placeholder="Mf: Mambwe Primary"></div><div><label>&nbsp;</label><button class="btn" onclick="addShule()">+ Ongeza Shule</button></div></div>
+<div class="row"><div><label>Chuja Shule kwa Kata (hiari)</label><select id="shuleFilterKata" onchange="renderShule()"><option value="">Kata Zote - Onyesha Zote</option></select></div></div>
+<div id="shuleList"></div><div id="editShuleBox"></div>
+</div>
+</section>
+
+<section id="reg2" style="display:none;">
+<div class="section-block green">
+<div class="section-title"><span class="icon">👩🏾‍🎓</span> Usajili wa Wanafunzi</div>
+<p class="section-desc">Chagua Mwaka, Shule na Darasa, halafu sajili mmoja mmoja au Import kwa Excel.</p>
+<div class="row">
+<div><label>Mwaka *</label><select id="stuYear" onchange="onClassChange()"></select></div>
+<div><label>1. Chagua Shule</label><select id="stuShule" onchange="onClassChange()"></select></div>
+<div><label>2. Chagua Darasa</label><select id="stuClass" onchange="onClassChange()"><option value="">-- Chagua Darasa --</option><option>Darasa I</option><option>Darasa II</option><option>Darasa III</option><option>Darasa IV</option><option>Darasa V</option><option>Darasa VI</option><option>Darasa VII</option></select></div>
+<div><label>Print</label><button class="btn purple" onclick="printReport()">🖨️ Print Ripoti</button></div>
+</div>
+<div id="classInfo" class="small" style="margin-top:10px;"></div>
+<div id="singleRegArea" class="hidden" style="margin-top:18px;"><button class="btn green big" onclick="openSingleForm()">➕ Sajili Mwanafunzi Mpya (Mmoja Mmoja)</button></div>
+<div id="studentForm" class="hidden"><hr><h4 id="formTitle">Sajili Mwanafunzi</h4>
+<div class="row"><div><label>Namba ya Mtahiniwa *</label><input id="stdNo" placeholder="PS001"></div><div><label>Jina Kamili</label><input id="stdName"></div><div><label>Jinsia</label><select id="stdGender"><option>Mvulana</option><option>Msichana</option></select></div></div>
+<div class="grid">
+<div><label>HTM</label><input type="number" id="s0" min="0" max="100" placeholder="0-100" oninput="clampMark(this)"></div>
+<div><label>Hisabati</label><input type="number" id="s1" min="0" max="100" placeholder="0-100" oninput="clampMark(this)"></div>
+<div><label>Kiswahili</label><input type="number" id="s2" min="0" max="100" placeholder="0-100" oninput="clampMark(this)"></div>
+<div><label>Sayansi</label><input type="number" id="s3" min="0" max="100" placeholder="0-100" oninput="clampMark(this)"></div>
+<div><label>Uraia</label><input type="number" id="s4" min="0" max="100" placeholder="0-100" oninput="clampMark(this)"></div>
+<div><label>English</label><input type="number" id="s5" min="0" max="100" placeholder="0-100" oninput="clampMark(this)"></div>
+</div><br>
+<button class="btn green" id="saveBtn" onclick="saveStudent()">💾 Hifadhi</button> <button class="btn ghost" onclick="cancelEdit()">Ghairi</button>
+</div>
+<div class="importBox"><h4>📥 1. Import Majina Tu</h4><p class="small">Excel: <b>Namba | Jina | Jinsia</b></p>
+<div class="row"><div><label>Chagua Faili</label><input type="file" id="importFile" accept=".xlsx,.xls,.csv"></div><div><label>&nbsp;</label><button class="btn" onclick="importExcel()">📥 Import Majina Tu</button></div></div>
+<button class="btn ghost" onclick="downloadTemplate()">⬇ Template Majina Tu</button><div id="importResult" class="small"></div>
+</div>
+<div class="importMarksBox"><h4>📥 2. Import Majina + Marks Zote</h4><p class="small">Excel: <b>Namba | Jina | HTM | Hisabati | Kiswahili | Sayansi | Uraia | English</b></p>
+<div class="row"><div><label>Chagua Faili la Marks</label><input type="file" id="importMarksFile" accept=".xlsx,.xls,.csv"></div><div><label>&nbsp;</label><button class="btn green" onclick="importMarksExcel()">📥 Import Marks Sasa</button></div></div>
+<button class="btn ghost" onclick="downloadMarksTemplate()">⬇ Pakua Template ya Marks</button><div id="importMarksResult" class="small"></div>
+</div>
+<div id="studentList"></div>
+</div>
+</section>
+
+<section id="results" style="display:none;">
+<div class="section-block purple">
+<div class="section-title"><span class="icon">📋</span> Matokeo - Wilaya ya Kalambo</div>
+<div class="row">
+<div><label>Mwaka *</label><select id="resYear" onchange="renderResults()"></select></div>
+<div><label>Darasa *</label><select id="resClass" onchange="renderResults()"><option value="">-- Chagua --</option><option>Darasa I</option><option>Darasa II</option><option>Darasa III</option><option>Darasa IV</option><option>Darasa V</option><option>Darasa VI</option><option>Darasa VII</option></select></div>
+<div><label>Tazama kwa</label><select id="resLevel" onchange="onResLevelChange()"><option value="wilaya">Wilaya Nzima</option><option value="tarafa">Tarafa</option><option value="kata">Kata</option><option value="shule">Shule</option></select></div>
+<div><label>Chagua</label><select id="resFilter" onchange="renderResults()"></select></div>
+</div>
+<div class="row">
+<div><label>Tafuta</label><input id="resSearch" oninput="renderResults()" placeholder="Jina au PS001..."></div>
+<div><label>Grade</label><select id="resGrade" onchange="renderResults()"><option value="">Zote</option><option>A</option><option>B</option><option>C</option><option>D</option><option>F</option></select></div>
+<div><label>Ufaulu</label><select id="resPass" onchange="renderResults()"><option value="">Wote</option><option value="pass">Waliofaulu</option><option value="fail">Waliofeli</option></select></div>
+<div><label>&nbsp;</label><button class="btn purple" onclick="printReportFromResults()">🖨️ Print</button></div>
+</div>
+<div id="resultsTable"></div>
+</div>
+</section>
+
+<section id="schoolView" style="display:none;">
+<div class="section-block teal">
+<div class="section-title"><span class="icon">🏫</span> Matokeo ya Shule</div>
+<div class="row">
+<div><label>Mwaka</label><select id="svYear" onchange="renderSchoolView()"></select></div>
+<div><label>Shule</label><select id="svShule" onchange="renderSchoolView()"></select></div>
+<div><label>Darasa</label><select id="svClass" onchange="renderSchoolView()"><option value="">-- Chagua --</option><option>Darasa I</option><option>Darasa II</option><option>Darasa III</option><option>Darasa IV</option><option>Darasa V</option><option>Darasa VI</option><option>Darasa VII</option></select></div>
+<div><label>&nbsp;</label><button class="btn purple" onclick="printSchoolView()">🖨️ Print</button></div>
+</div>
+<div id="schoolViewTable"></div>
+</div>
+</section>
+
+<section id="rank" style="display:none;">
+<div class="section-block yellow">
+<div class="section-title"><span class="icon">🏆</span> Top 10</div>
+<div class="row">
+<div><label>Mwaka</label><select id="rankYear" onchange="renderRank()"></select></div>
+<div><label>Darasa *</label><select id="rankClass" onchange="renderRank()"><option value="">-- Chagua --</option><option>Darasa I</option><option>Darasa II</option><option>Darasa III</option><option>Darasa IV</option><option>Darasa V</option><option>Darasa VI</option><option>Darasa VII</option></select></div>
+<div><label>Kiwango</label><select id="rankLevel" onchange="onRankLevelChange()"><option value="shule">Shule</option><option value="kata">Kata</option><option value="tarafa">Tarafa</option><option value="wilaya">Wilaya</option></select></div>
+<div><label>Chagua</label><select id="rankFilter" onchange="renderRank()"></select></div>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;"><div id="top10"></div><div id="bottom10"></div></div>
+</div>
+<div class="section-block blue"><div class="section-title"><span class="icon">🏫</span> Shule Bora</div><div id="schoolRank"></div></div>
+<div class="section-block green"><div class="section-title"><span class="icon">📍</span> Kata & Tarafa</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;"><div id="kataRank"></div><div id="tarafaRank"></div></div></div>
+<div class="section-block slate"><div class="section-title"><span class="icon">📋</span> Mpangilio Kamili</div><div id="fullRank"></div></div>
+</section>
+
+<section id="subjects" style="display:none;">
+<div class="section-block pink">
+<div class="section-title"><span class="icon">📚</span> Ufaulu wa Masomo</div>
+<div class="row">
+<div><label>Mwaka</label><select id="subYear" onchange="renderSubjects()"></select></div>
+<div><label>Darasa *</label><select id="subClass" onchange="renderSubjects()"><option value="">-- Chagua --</option><option>Darasa I</option><option>Darasa II</option><option>Darasa III</option><option>Darasa IV</option><option>Darasa V</option><option>Darasa VI</option><option>Darasa VII</option></select></div>
+<div><label>Kiwango</label><select id="subLevel" onchange="onSubLevelChange()"><option value="wilaya">Wilaya</option><option value="shule">Shule</option><option value="kata">Kata</option><option value="tarafa">Tarafa</option></select></div>
+<div><label>Chagua</label><select id="subFilter" onchange="renderSubjects()"></select></div>
+</div>
+<div id="subjectTable"></div><div id="subjectTop"></div><div id="subjectBestArea"></div>
+</div>
+</section>
+
+<section id="backupPage" style="display:none;">
+<div class="section-block green">
+<div class="section-title"><span class="icon">💾</span> Backup Kuu</div>
+<p class="section-desc">Hifadhi na rudisha data zote hapa.</p>
+<div class="grid">
+<div class="stat"><small>Tarafa</small><br><b id="bkTarafa">0</b></div>
+<div class="stat"><small>Kata</small><br><b id="bkKata">0</b></div>
+<div class="stat"><small>Shule</small><br><b id="bkShule">0</b></div>
+<div class="stat"><small>Wanafunzi</small><br><b id="bkWanafunzi">0</b></div>
+<div class="stat"><small>Miaka</small><br><b id="bkYears">-</b></div>
+<div class="stat"><small>Backup ya Mwisho</small><br><b id="bkLast" style="font-size:14px;">Bado</b></div>
+</div><br>
+<div class="row">
+<div><button class="btn green big" onclick="exportBackup()">⬇ Pakua Backup Sasa (JSON)</button></div>
+<div><button class="btn orange big" onclick="document.getElementById('restoreFile').click()">⬆ Rudisha Backup</button><input type="file" id="restoreFile" accept=".json" style="display:none;" onchange="importBackup(event)"></div>
+</div>
+</div>
+<div class="section-block yellow">
+<div class="section-title"><span class="icon">🛡️</span> Backup ya Dharura (Auto)</div>
+<div class="row"><div><label>Nakala ya Dharura</label><div id="autoBackupInfo" class="small">Hakuna bado</div></div><div><label>&nbsp;</label><button class="btn" onclick="restoreAutoBackup()">↩ Rudisha Nakala ya Dharura</button></div></div>
+</div>
+<div class="section-block purple">
+<div class="section-title"><span class="icon">📥</span> Pakua Matokeo kama CSV</div>
+<div class="row"><div><label>Mwaka</label><select id="bkYear"></select></div><div><label>Darasa</label><select id="bkClass"><option value="">Darasa Zote</option><option>Darasa I</option><option>Darasa II</option><option>Darasa III</option><option>Darasa IV</option><option>Darasa V</option><option>Darasa VI</option><option>Darasa VII</option></select></div><div><label>&nbsp;</label><button class="btn purple" onclick="exportCSV()">⬇ Pakua Matokeo CSV</button></div></div>
+</div>
+</section>
+
+<section id="profilePage" style="display:none;">
+<div class="section-block pink">
+<div class="section-title"><span class="icon">👤</span> Wasifu wa Admin</div>
+<p class="section-desc">Badilisha jina, email, password na picha yako. Picha itabadilika kila mahali mara moja.</p>
+<div class="flex">
+<div style="display:flex;gap:18px;align-items:center;">
+<div id="profileAvatar" class="avatar large" data-avatar>👤</div>
+<div><h3 id="profileNameDisplay" style="margin:0;">Promise daud</h3><p id="profileEmailDisplay" class="small">kalambo@gmail.com</p></div>
+</div>
+<button class="btn red small" onclick="removePic()">🗑 Ondoa Picha</button>
+</div>
+<hr style="margin:22px 0;">
+<div class="row"><div><label>Jina Kamili la Admin *</label><input id="profName"></div><div><label>Email ya Admin *</label><input id="profEmail"></div></div>
+<div class="row"><div><label>Password Mpya (acha tupu kama hutaki kubadilisha)</label><input id="profPass" type="password"></div><div><label>Thibitisha Password Mpya</label><input id="profPass2" type="password"></div></div>
+<div class="row"><div><label>Profile Picture - Chagua Picha Mpya</label><input type="file" id="profPic" accept="image/*" onchange="previewPic(event)"></div><div><label>&nbsp;</label><button class="btn green" onclick="saveProfile()">💾 Hifadhi Wasifu</button></div></div>
+<div id="profileMsg" class="small"></div>
+<hr style="margin:22px 0;">
+<button class="btn red big" onclick="logout()">🚪 Toka / Nenda kwenye Login</button>
+</div>
+</section>
+  <div id="printArea" style="display:none;"></div>
+</main>
+<script>
+let DB;
+try{ DB=JSON.parse(localStorage.getItem("KALAMBO_V8")||localStorage.getItem("KALAMBO_V7")||'{"tarafa":[],"kata":[],"shule":[],"wanafunzi":[],"years":[2025,2026],"activeYear":2026,"lastBackup":"","admin":{"name":"Promise daud","email":"kalambo@gmail.com","password":"kalambo","pic":""}}'); }
+catch(e){ DB={tarafa:[],kata:[],shule:[],wanafunzi:[],years:[2025,2026],activeYear:2026,lastBackup:"",admin:{name:"Promise daud",email:"kalambo@gmail.com",password:"kalambo",pic:""}}; }
+if(!DB.admin) DB.admin={name:"Promise daud",email:"kalambo@gmail.com",password:"kalambo",pic:""};
+if(!DB.years) DB.years=[2026]; if(!DB.activeYear) DB.activeYear=2026;
+let editId=null, tempPic="";
+const SUBJECTS=["HTM","Hisabati","Kiswahili","Sayansi","Uraia na Maadili","English"];
+const SUBJECTS_FULL=["Historia ya Tanzania na Maadili (HTM)","Hisabati","Kiswahili","Sayansi","Uraia na Maadili","English"];
+
+// ===== LOGIN =====
+function togglePass(){ let el=document.getElementById("loginPass"); el.type=(el.type==="password")?"text":"password"; }
+function resetLogin(){ try{localStorage.removeItem("KALAMBO_LOGGED");sessionStorage.removeItem("KALAMBO_LOGGED");}catch(e){} document.getElementById("loginName").value="Promise daud"; document.getElementById("loginEmail").value="kalambo@gmail.com"; document.getElementById("loginPass").value="kalambo"; document.getElementById("loginError").textContent=""; document.getElementById("loginOk").textContent="Login imereset."; }
+function isLogged(){ try{return localStorage.getItem("KALAMBO_LOGGED")==="1"||sessionStorage.getItem("KALAMBO_LOGGED")==="1";}catch(e){return false;} }
+function doLogin(){
+let n=(document.getElementById("loginName").value||"").trim().toLowerCase();
+let e=(document.getElementById("loginEmail").value||"").trim().toLowerCase();
+let p=document.getElementById("loginPass").value||"";
+let an=(DB.admin.name||"").trim().toLowerCase(), ae=(DB.admin.email||"").trim().toLowerCase(), ap=(DB.admin.password||"").trim();
+document.getElementById("loginError").textContent=""; document.getElementById("loginOk").textContent="⏳ Inaingia...";
+if(n===an && e===ae && p.trim()===ap){
+try{localStorage.setItem("KALAMBO_LOGGED","1");sessionStorage.setItem("KALAMBO_LOGGED","1");}catch(err){}
+document.getElementById("loginOk").textContent="✅ Umeingia!";
+setTimeout(()=>{ document.getElementById("loginScreen").style.display="none"; initAll(); },300);
+} else { document.getElementById("loginOk").textContent=""; document.getElementById("loginError").textContent="❌ Jina au Email au Password si sahihi. Tumia: Promise daud / kalambo@gmail.com / kalambo"; }
+}
+function logout(){ try{localStorage.removeItem("KALAMBO_LOGGED");sessionStorage.removeItem("KALAMBO_LOGGED");}catch(e){} document.getElementById("loginScreen").style.display="flex"; document.getElementById("loginPass").value=DB.admin.password||"kalambo"; updateAvatars(); }
+function goProfile(){ show('profilePage',document.querySelectorAll('nav button')[8]); }
+
+// ===== AVATAR / PROFILE =====
+function updateAvatars(){
+document.querySelectorAll("[data-avatar]").forEach(function(el){
+if(DB.admin.pic){ el.innerHTML='<img src="'+DB.admin.pic+'">'; }
+else { if(el.id==="loginAvatar") el.textContent="🎓"; else el.textContent=(DB.admin.name||"P").trim().charAt(0).toUpperCase(); }
+});
+["dashAdminName","profileNameDisplay"].forEach(function(id){ let el=document.getElementById(id); if(el) el.textContent=DB.admin.name; });
+["dashAdminEmail","profileEmailDisplay"].forEach(function(id){ let el=document.getElementById(id); if(el) el.textContent=DB.admin.email; });
+let pn=document.getElementById("profName"); if(pn) pn.value=DB.admin.name;
+let pe=document.getElementById("profEmail"); if(pe) pe.value=DB.admin.email;
+}
+function previewPic(e){ let f=e.target.files[0]; if(!f) return; let r=new FileReader(); r.onload=function(ev){ tempPic=ev.target.result; DB.admin.pic=tempPic; updateAvatars(); saveOnly(); }; r.readAsDataURL(f); }
+function removePic(){ if(!confirm("Ondoa picha?")) return; DB.admin.pic=""; tempPic=""; saveOnly(); updateAvatars(); alert("Picha imeondolewa."); }
+function saveProfile(){
+let n=document.getElementById("profName").value.trim();
+let em=document.getElementById("profEmail").value.trim().toLowerCase();
+let p1=document.getElementById("profPass").value, p2=document.getElementById("profPass2").value;
+if(!n||!em) return alert("Jaza Jina na Email");
+if(p1 && p1!==p2) return alert("Password mbili hazifanani");
+if(p1 && p1.length<4) return alert("Password iwe angalau herufi 4");
+DB.admin.name=n; DB.admin.email=em; if(p1) DB.admin.password=p1; if(tempPic) DB.admin.pic=tempPic;
+document.getElementById("profPass").value=""; document.getElementById("profPass2").value=""; tempPic=""; saveOnly(); updateAvatars();
+document.getElementById("profileMsg").innerHTML="✅ Wasifu umehifadhiwa!";
+alert("✅ Wasifu umehifadhiwa!");
+}
+
+// ===== CORE SAVE - HAIHARIBU FOMU =====
+function saveOnly(){ try{localStorage.setItem("KALAMBO_V8",JSON.stringify(DB));}catch(e){alert("⚠️ LocalStorage imejaa. Pakua Backup.");} try{localStorage.setItem("KALAMBO_AUTO",JSON.stringify(DB));}catch(e){} }
+function save(){ saveOnly(); }
+
+// ===== HELPERS =====
+function clampMark(el){ let v=parseFloat(el.value); if(isNaN(v)) return; if(v>100){el.value=100;alert("Marks haziwezi kuzidi 100.");} if(v<0){el.value=0;alert("Marks haziwezi kuwa chini ya 0.");} }
+function cleanMark(v){ v=parseFloat(v); if(isNaN(v)) return 0; return Math.max(0,Math.min(100,Math.round(v))); }
+function grade(m){ if(m>=75) return "A"; if(m>=60) return "B"; if(m>=45) return "C"; if(m>=30) return "D"; return "F"; }
+function calc(s){ let t=s.marks.reduce((a,b)=>a+b,0); return {total:t,avg:t/6,grades:s.marks.map(grade),overall:grade(t/6)}; }
+function getShule(id){ return DB.shule.find(x=>x.id==id); }
+function getKata(id){ return DB.kata.find(x=>x.id==id); }
+function getTarafa(id){ return DB.tarafa.find(x=>x.id==id); }
+function enrich(s){ let sh=getShule(s.shuleId)||{}; let ka=getKata(sh.kataId)||{}; let ta=getTarafa(ka.tarafaId)||{}; let c=calc(s); return {...s,...c,shuleName:sh.name||"-",kataName:ka.name||"-",tarafaName:ta.name||"-",kataId:sh.kataId,tarafaId:ka.tarafaId,year:s.year||DB.activeYear}; }
+function avgOf(l){ return l.length?l.reduce((a,b)=>a+b.avg,0)/l.length:0; }
+function show(id,btn){ document.querySelectorAll("main section").forEach(e=>e.style.display="none"); document.getElementById(id).style.display="block"; document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active")); if(btn) btn.classList.add("active"); if(id==="dash") renderDash(); if(id==="results") renderResults(); if(id==="schoolView") renderSchoolView(); if(id==="rank") renderRank(); if(id==="subjects") renderSubjects(); if(id==="backupPage") renderBackup(); }
+function fillYearSelects(){
+let opts=DB.years.map(y=>'<option value="'+y+'" '+(y==DB.activeYear?"selected":"")+'>'+y+'</option>').join("");
+["dashYear","stuYear","resYear","svYear","rankYear","subYear","activeYearSelect","bkYear"].forEach(id=>{ let el=document.getElementById(id); if(el){ let old=el.value||DB.activeYear; el.innerHTML=opts; el.value=old; } });
+}
+function fillStaticSelects(){
+let kataOld=document.getElementById("kataTarafa").value;
+document.getElementById("kataTarafa").innerHTML=DB.tarafa.map(t=>'<option value="'+t.id+'">'+t.name+'</option>').join("")||"<option value=''>Hakuna Tarafa - Ongeza kwanza</option>";
+if(kataOld) document.getElementById("kataTarafa").value=kataOld;
+let skOld=document.getElementById("shuleKata").value;
+document.getElementById("shuleKata").innerHTML=DB.kata.map(k=>'<option value="'+k.id+'">'+k.name+' ('+((getTarafa(k.tarafaId)||{}).name||"")+')</option>').join("")||"<option value=''>Hakuna Kata</option>";
+if(skOld) document.getElementById("shuleKata").value=skOld;
+let sfOld=document.getElementById("shuleFilterKata").value;
+document.getElementById("shuleFilterKata").innerHTML='<option value="">Kata Zote - Onyesha Zote</option>'+DB.kata.map(k=>'<option value="'+k.id+'">'+k.name+' ('+((getTarafa(k.tarafaId)||{}).name||"")+')</option>').join("");
+if(sfOld) document.getElementById("shuleFilterKata").value=sfOld;
+let stuOld=document.getElementById("stuShule").value;
+document.getElementById("stuShule").innerHTML=DB.shule.map(s=>{ let k=getKata(s.kataId)||{}; return '<option value="'+s.id+'">'+s.name+' - '+k.name+'</option>'; }).join("")||"<option value=''>Hakuna Shule</option>";
+if(stuOld) document.getElementById("stuShule").value=stuOld;
+document.getElementById("svShule").innerHTML=DB.shule.map(s=>'<option value="'+s.id+'">'+s.name+'</option>').join("")||"<option value=''>Hakuna Shule</option>";
+}
+
+// ===== RENDER TARAFA / KATA / SHULE - ZINAZOUPDATE MARA MOJA =====
+function renderTarafa(){
+document.getElementById("yearList").innerHTML='<table><tr><th>Mwaka</th><th>Hali</th><th>Wanafunzi</th><th>Hatua</th></tr>'+DB.years.map(y=>'<tr><td><b>'+y+'</b></td><td>'+(y==DB.activeYear?"<span class=\'badge A\'>Unaotumika</span>":"Kumbukumbu")+'</td><td>'+DB.wanafunzi.filter(x=>x.year==y).length+'</td><td>'+(y!=DB.activeYear?'<button class="btn small" onclick="setActiveYear('+y+')">Weka kama Unaotumika</button>':"-")+'</td></tr>').join("")+'</table>';
+document.getElementById("tarafaList").innerHTML='<table><tr><th>#</th><th>Tarafa</th><th>Kata</th><th>Shule</th><th>Wanafunzi</th><th>Hatua</th></tr>'+DB.tarafa.map((t,i)=>{ let kIds=DB.kata.filter(k=>k.tarafaId==t.id); let sIds=DB.shule.filter(s=>kIds.map(k=>k.id).includes(s.kataId)); return '<tr><td>'+(i+1)+'</td><td><b>'+t.name+'</b></td><td>'+kIds.length+'</td><td>'+sIds.length+'</td><td>'+DB.wanafunzi.filter(x=>sIds.map(s=>s.id).includes(x.shuleId)).length+'</td><td><button class="btn orange small" onclick="editTarafa('+t.id+')">Hariri</button> <button class="btn red small" onclick="delTarafa('+t.id+')">Futa</button></td></tr>'; }).join("")+'</table>';
+}
+function renderKata(){
+let html="";
+DB.tarafa.forEach(function(t){
+let list=DB.kata.filter(k=>k.tarafaId==t.id);
+html+='<div class="kata-group"><div class="kata-group-head"><b>📍 TARAFA: '+t.name+'</b><small>Kata: '+list.length+'</small></div><table><tr><th>#</th><th>Kata</th><th>Shule</th><th>Wanafunzi</th><th>Hatua</th></tr>';
+if(!list.length) html+='<tr><td colspan="5" style="text-align:center;color:#64748b;">Hakuna Kata bado kwenye Tarafa hii</td></tr>';
+list.forEach(function(k,i){ let sIds=DB.shule.filter(s=>s.kataId==k.id); html+='<tr><td>'+(i+1)+'</td><td><b>'+k.name+'</b></td><td>'+sIds.length+'</td><td>'+DB.wanafunzi.filter(x=>sIds.map(s=>s.id).includes(x.shuleId)).length+'</td><td><button class="btn orange small" onclick="editKata('+k.id+')">Hariri</button> <button class="btn red small" onclick="delKata('+k.id+')">Futa</button></td></tr>'; });
+html+='</table></div>';
+});
+if(!DB.tarafa.length) html='<p class="small">Ongeza Tarafa kwanza.</p>';
+// Kata ambazo hazina Tarafa (ikiwa zipo)
+let orphan=DB.kata.filter(k=>!DB.tarafa.find(t=>t.id==k.tarafaId));
+if(orphan.length){ html+='<div class="kata-group"><div class="kata-group-head"><b>⚠️ Kata Bila Tarafa</b></div><table>'+orphan.map((k,i)=>'<tr><td>'+(i+1)+'</td><td>'+k.name+'</td><td><button class="btn orange small" onclick="editKata('+k.id+')">Hariri</button> <button class="btn red small" onclick="delKata('+k.id+')">Futa</button></td></tr>').join("")+'</table></div>'; }
+document.getElementById("kataList").innerHTML=html;
+}
+function renderShule(){
+let filter=document.getElementById("shuleFilterKata") ? document.getElementById("shuleFilterKata").value : "";
+let katas = filter ? DB.kata.filter(k=>k.id==filter) : DB.kata;
+let html="";
+katas.forEach(function(k){
+let t=getTarafa(k.tarafaId)||{};
+let list=DB.shule.filter(s=>s.kataId==k.id);
+html+='<div class="kata-group"><div class="kata-group-head"><b>📌 KATA: '+k.name+' <small style="font-weight:400;">| Tarafa: '+t.name+'</small></b><small>Shule: '+list.length+'</small></div><table><tr><th>#</th><th>Shule</th><th>Wanafunzi</th><th>Hatua</th></tr>';
+if(!list.length) html+='<tr><td colspan="4" style="text-align:center;color:#64748b;">Hakuna Shule bado kwenye Kata hii - Ongeza juu</td></tr>';
+list.forEach(function(s,i){ html+='<tr><td>'+(i+1)+'</td><td><b>'+s.name+'</b></td><td>'+DB.wanafunzi.filter(x=>x.shuleId==s.id).length+'</td><td><button class="btn orange small" onclick="editShule('+s.id+')">Hariri</button> <button class="btn red small" onclick="delShule('+s.id+')">Futa</button></td></tr>'; });
+html+='</table></div>';
+});
+if(!DB.kata.length) html='<p class="small">Ongeza Kata kwanza.</p>';
+if(filter && !katas.length) html='<p class="small">Hakuna Kata iliyochaguliwa.</p>';
+document.getElementById("shuleList").innerHTML=html;
+}
+function renderPage1(){ renderTarafa(); renderKata(); renderShule(); fillStaticSelects(); }
+
+// ===== ADD / EDIT / DELETE - UPDATE MARA MOJA =====
+function addYear(){ let y=parseInt(document.getElementById("newYear").value); if(!y||y<2020||y>2035) return alert("Andika mwaka sahihi"); if(DB.years.includes(y)) return alert("Mwaka huo upo"); DB.years.push(y); DB.years.sort(); DB.activeYear=y; document.getElementById("newYear").value=""; saveOnly(); fillYearSelects(); renderTarafa(); renderDash(); alert("Mwaka "+y+" umeongezwa."); }
+function setActiveYear(y){ DB.activeYear=parseInt(y); saveOnly(); fillYearSelects(); renderTarafa(); renderDash(); }
+function addTarafa(){ let n=document.getElementById("tarafaName").value.trim(); if(!n) return alert("Andika tarafa"); DB.tarafa.push({id:Date.now(),name:n}); document.getElementById("tarafaName").value=""; saveOnly(); renderPage1(); renderDash(); }
+function addKata(){ let t=document.getElementById("kataTarafa").value, n=document.getElementById("kataName").value.trim(); if(!t||!n) return alert("Chagua tarafa + kata"); DB.kata.push({id:Date.now(),name:n,tarafaId:+t}); document.getElementById("kataName").value=""; saveOnly(); renderPage1(); }
+function addShule(){ let k=document.getElementById("shuleKata").value, n=document.getElementById("shuleName").value.trim(); if(!k||!n) return alert("Chagua kata + shule"); DB.shule.push({id:Date.now(),name:n,kataId:+k}); document.getElementById("shuleName").value=""; saveOnly(); renderPage1(); }
+function editTarafa(id){ let t=getTarafa(id); document.getElementById("editTarafaBox").innerHTML='<div class="editBox"><b>Hariri Tarafa</b><div class="row"><div><input id="editTarafaInput" value="'+t.name+'"></div><div><button class="btn" onclick="updateTarafa('+id+')">Update</button></div></div></div>'; }
+function updateTarafa(id){ getTarafa(id).name=document.getElementById("editTarafaInput").value.trim(); document.getElementById("editTarafaBox").innerHTML=""; saveOnly(); renderPage1(); }
+function editKata(id){ let k=getKata(id); document.getElementById("editKataBox").innerHTML='<div class="editBox"><b>Hariri Kata</b><div class="row"><div><input id="editKataInput" value="'+k.name+'"></div><div><select id="editKataTarafa">'+DB.tarafa.map(t=>'<option value="'+t.id+'" '+(t.id==k.tarafaId?"selected":"")+'>'+t.name+'</option>').join("")+'</select></div><div><button class="btn" onclick="updateKata('+id+')">Update</button></div></div></div>'; }
+function updateKata(id){ let k=getKata(id); k.name=document.getElementById("editKataInput").value.trim(); k.tarafaId=+document.getElementById("editKataTarafa").value; document.getElementById("editKataBox").innerHTML=""; saveOnly(); renderPage1(); }
+function editShule(id){ let s=getShule(id); document.getElementById("editShuleBox").innerHTML='<div class="editBox"><b>Hariri Shule</b><div class="row"><div><input id="editShuleInput" value="'+s.name+'"></div><div><select id="editShuleKata">'+DB.kata.map(k=>'<option value="'+k.id+'" '+(k.id==s.kataId?"selected":"")+'>'+k.name+'</option>').join("")+'</select></div><div><button class="btn" onclick="updateShule('+id+')">Update</button></div></div></div>'; }
+function updateShule(id){ let s=getShule(id); s.name=document.getElementById("editShuleInput").value.trim(); s.kataId=+document.getElementById("editShuleKata").value; document.getElementById("editShuleBox").innerHTML=""; saveOnly(); renderPage1(); }
+function delTarafa(id){ if(!confirm("Futa tarafa? Kata, Shule na wanafunzi wake watafutwa.")) return; let kataIds=DB.kata.filter(k=>k.tarafaId==id).map(k=>k.id); let shuleIds=DB.shule.filter(s=>kataIds.includes(s.kataId)).map(s=>s.id); DB.tarafa=DB.tarafa.filter(x=>x.id!=id); DB.kata=DB.kata.filter(x=>x.tarafaId!=id); DB.shule=DB.shule.filter(x=>!kataIds.includes(x.kataId)); DB.wanafunzi=DB.wanafunzi.filter(x=>!shuleIds.includes(x.shuleId)); saveOnly(); renderPage1(); renderDash(); }
+function delKata(id){ if(!confirm("Futa kata?")) return; let shuleIds=DB.shule.filter(s=>s.kataId==id).map(s=>s.id); DB.kata=DB.kata.filter(x=>x.id!=id); DB.shule=DB.shule.filter(x=>x.kataId!=id); DB.wanafunzi=DB.wanafunzi.filter(x=>!shuleIds.includes(x.shuleId)); saveOnly(); renderPage1(); }
+function delShule(id){ if(!confirm("Futa shule?")) return; DB.shule=DB.shule.filter(x=>x.id!=id); DB.wanafunzi=DB.wanafunzi.filter(x=>x.shuleId!=id); saveOnly(); renderPage1(); }
+
+// ===== WANAFUNZI =====
+function onClassChange(){
+let yr=document.getElementById("stuYear").value, sh=document.getElementById("stuShule").value, cl=document.getElementById("stuClass").value;
+if(sh&&cl){ document.getElementById("singleRegArea").classList.remove("hidden"); let s=getShule(+sh); let cnt=DB.wanafunzi.filter(x=>x.shuleId==+sh&&x.class==cl&&x.year==yr).length; document.getElementById("classInfo").innerHTML='Umechagua: <b>Mwaka '+yr+' • '+(s?s.name:"")+' • '+cl+'</b> • Wanafunzi: <b>'+cnt+'</b>'; renderStudentList(); }
+else{ document.getElementById("singleRegArea").classList.add("hidden"); document.getElementById("classInfo").innerHTML='<span style="color:#dc2626;">⚠️ Chagua Mwaka, Shule na Darasa kwanza.</span>'; document.getElementById("studentList").innerHTML=""; }
+}
+function openSingleForm(){ document.getElementById("studentForm").classList.remove("hidden"); document.getElementById("studentForm").scrollIntoView({behavior:"smooth"}); }
+function resetStudentForm(){ editId=null; document.getElementById("stdNo").value=""; document.getElementById("stdName").value=""; for(let i=0;i<6;i++) document.getElementById("s"+i).value=""; document.getElementById("saveBtn").textContent="💾 Hifadhi"; document.getElementById("formTitle").textContent="Sajili Mwanafunzi"; document.getElementById("studentForm").classList.add("hidden"); }
+function saveStudent(){
+let yr=document.getElementById("stuYear").value, sh=document.getElementById("stuShule").value, cl=document.getElementById("stuClass").value, name=document.getElementById("stdName").value.trim(), no=document.getElementById("stdNo").value.trim();
+if(!sh||!cl||!name||!no) return alert("Jaza Namba, Jina, Shule na Darasa");
+let marks=[0,1,2,3,4,5].map(i=>cleanMark(document.getElementById("s"+i).value));
+if(editId){ let st=DB.wanafunzi.find(x=>x.id==editId); st.name=name; st.shuleId=+sh; st.class=cl; st.year=parseInt(yr); st.gender=document.getElementById("stdGender").value; st.candidateNo=no; st.marks=marks; }
+else{ DB.wanafunzi.push({id:Date.now(),name,shuleId:+sh,class:cl,year:parseInt(yr),gender:document.getElementById("stdGender").value,candidateNo:no,marks}); }
+saveOnly(); resetStudentForm(); onClassChange(); renderDash();
+}
+function editStudent(id){
+let s=DB.wanafunzi.find(x=>x.id==id); editId=id;
+document.getElementById("stuYear").value=s.year||DB.activeYear; document.getElementById("stuShule").value=s.shuleId; document.getElementById("stuClass").value=s.class;
+document.getElementById("singleRegArea").classList.remove("hidden"); document.getElementById("studentForm").classList.remove("hidden");
+document.getElementById("stdName").value=s.name; document.getElementById("stdGender").value=s.gender; document.getElementById("stdNo").value=s.candidateNo||"";
+s.marks.forEach((m,i)=>document.getElementById("s"+i).value=m);
+document.getElementById("saveBtn").textContent="✅ Update"; document.getElementById("formTitle").textContent="✏️ Unahariri: "+s.name;
+document.getElementById("studentForm").scrollIntoView({behavior:"smooth"});
+}
+function cancelEdit(){ resetStudentForm(); }
+function delStudent(id){ if(confirm("Futa mwanafunzi?")){ DB.wanafunzi=DB.wanafunzi.filter(x=>x.id!=id); saveOnly(); onClassChange(); renderDash(); } }
+function rankOf(list){ let sorted=[...list].sort((a,b)=>b.avg-a.avg); let m={}; sorted.forEach((s,i)=>m[s.id]=i+1); return m; }
+function filterStudents(level,filter,cls,yr){ let all=DB.wanafunzi.map(enrich); if(yr) all=all.filter(x=>x.year==yr); if(cls) all=all.filter(x=>x.class==cls); if(level=="shule"&&filter) return all.filter(x=>x.shuleId==filter); if(level=="kata"&&filter) return all.filter(x=>x.kataId==filter); if(level=="tarafa"&&filter) return all.filter(x=>x.tarafaId==filter); return all; }
+function optsFor(level){ if(level=="shule") return DB.shule.map(s=>'<option value="'+s.id+'">'+s.name+'</option>').join(""); if(level=="kata") return DB.kata.map(k=>'<option value="'+k.id+'">'+k.name+'</option>').join(""); if(level=="tarafa") return DB.tarafa.map(t=>'<option value="'+t.id+'">'+t.name+'</option>').join(""); return "<option value=''>Wilaya Nzima</option>"; }
+function onResLevelChange(){ document.getElementById("resFilter").innerHTML=optsFor(document.getElementById("resLevel").value); renderResults(); }
+function onRankLevelChange(){ document.getElementById("rankFilter").innerHTML=optsFor(document.getElementById("rankLevel").value); renderRank(); }
+function onSubLevelChange(){ document.getElementById("subFilter").innerHTML=optsFor(document.getElementById("subLevel").value); renderSubjects(); }
+function downloadTemplate(){ let csv="Namba ya Mtahiniwa,Jina,Jinsia\nPS001,Neema John,Msichana\nPS002,Baraka Peter,Mvulana\n"; let a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"})); a.download="template_majina_kalambo.csv"; a.click(); }
+function downloadMarksTemplate(){ let csv="Namba ya Mtahiniwa,Jina,HTM,Hisabati,Kiswahili,Sayansi,Uraia,English\nPS001,Neema John,85,78,90,82,88,75\nPS002,Baraka Peter,70,65,72,68,74,60\n"; let a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"})); a.download="template_marks_kalambo.csv"; a.click(); }
+function importExcel(){
+let yr=document.getElementById("stuYear").value, sh=document.getElementById("stuShule").value, cl=document.getElementById("stuClass").value;
+if(!sh||!cl) return alert("Chagua Shule na Darasa kwanza!");
+let file=document.getElementById("importFile").files[0]; if(!file) return alert("Chagua faili");
+let reader=new FileReader();
+reader.onload=function(e){
+try{
+let rows=[]; if(file.name.endsWith(".csv")){ rows=e.target.result.split(/\r?\n/).map(r=>r.split(",").map(c=>c.trim().replace(/^"|"$/g,""))); }
+else{ let wb=XLSX.read(e.target.result,{type:"array"}); rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1}); }
+let added=0, skipped=0;
+rows.forEach(r=>{ if(!r||!r.length) return; let first=String(r[0]||"").trim(); if(!first||first.toLowerCase().includes("namba")) return; let candidateNo="",name="",gender="Mvulana"; if(r.length>=3){ candidateNo=first; name=String(r[1]||"").trim(); gender=String(r[2]||"Mvulana").trim(); } else if(r.length==2){ candidateNo=first; name=String(r[1]||"").trim(); } else { name=first; candidateNo="MT"+String(100+added); } if(!name) return; if(DB.wanafunzi.some(x=>x.shuleId==+sh&&x.class==cl&&x.year==yr&&x.candidateNo==candidateNo)){ skipped++; return; } DB.wanafunzi.push({id:Date.now()+added+Math.random(),name,shuleId:+sh,class:cl,year:parseInt(yr),gender:gender.toLowerCase().includes("msichana")?"Msichana":"Mvulana",candidateNo,marks:[0,0,0,0,0,0]}); added++; });
+saveOnly(); onClassChange(); renderDash(); document.getElementById("importResult").innerHTML="✅ Wameingia: "+added+" | Wamerukwa: "+skipped; alert("Import majina imefanikiwa! "+added);
+}catch(err){ alert(err.message); }
+};
+if(file.name.endsWith(".csv")) reader.readAsText(file); else reader.readAsArrayBuffer(file);
+}
+function importMarksExcel(){
+let yr=document.getElementById("stuYear").value, sh=document.getElementById("stuShule").value, cl=document.getElementById("stuClass").value;
+if(!sh||!cl) return alert("Chagua Shule, Darasa na Mwaka kwanza!");
+let file=document.getElementById("importMarksFile").files[0]; if(!file) return alert("Chagua faili la Marks kwanza");
+let reader=new FileReader();
+reader.onload=function(e){
+try{
+let rows=[]; if(file.name.endsWith(".csv")){ rows=e.target.result.split(/\r?\n/).map(r=>r.split(",").map(c=>c.trim().replace(/^"|"$/g,""))); }
+else{ let wb=XLSX.read(e.target.result,{type:"array"}); rows=XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]],{header:1}); }
+let updated=0, created=0, skipped=0;
+rows.forEach(r=>{ if(!r||r.length<3) return; let first=String(r[0]||"").trim(); if(!first||first.toLowerCase().includes("namba")) return; let candidateNo=first; let name=String(r[1]||"").trim(); if(!name&&r.length<8) return; let marks=[]; for(let i=0;i<6;i++){ let v=parseFloat(r[2+i]); marks.push(cleanMark(isNaN(v)?0:v)); } let existing=DB.wanafunzi.find(x=>x.shuleId==+sh&&x.class==cl&&x.year==yr&&x.candidateNo==candidateNo); if(existing){ existing.marks=marks; if(name) existing.name=name; updated++; } else { if(!name){ skipped++; return; } DB.wanafunzi.push({id:Date.now()+created+Math.random(),name,shuleId:+sh,class:cl,year:parseInt(yr),gender:"Mvulana",candidateNo,marks}); created++; } });
+saveOnly(); onClassChange(); renderDash(); document.getElementById("importMarksResult").innerHTML="✅ Update: <b>"+updated+"</b> | Wapya: <b>"+created+"</b>"; alert("Import Marks imefanikiwa! Update: "+updated+", Wapya: "+created);
+}catch(err){ alert("Imeshindikana: "+err.message); }
+};
+if(file.name.endsWith(".csv")) reader.readAsText(file); else reader.readAsArrayBuffer(file);
+}
+
+// ===== PRINT / BACKUP / CSV =====
+function buildPrintHTML(school,cl,list,yr){
+let kata=getKata(school.kataId)||{}; let tarafa=getTarafa(kata.tarafaId)||{}; let avg=avgOf(list); let pass=list.filter(x=>x.avg>=45).length;
+let rankMap={}; let sorted=[...list].sort((a,b)=>b.avg-a.avg); sorted.forEach((s,i)=>rankMap[s.id]=i+1);
+let byNo=[...list].sort((a,b)=>String(a.candidateNo).localeCompare(String(b.candidateNo)));
+return '<div style="text-align:center;"><h2>MFUMO WA MATOKEO - WILAYA YA KALAMBO</h2><h3>'+school.name+'</h3><p>Tarafa: '+tarafa.name+' | Kata: '+kata.name+' | Darasa: '+cl+' | Mwaka: '+yr+'</p><p>Wanafunzi: '+list.length+' | Wastani: '+avg.toFixed(1)+' | Waliofaulu: '+pass+'</p></div><table border="1" style="width:100%;border-collapse:collapse;font-size:12px;"><tr><th>Namba</th><th>Jina</th><th>HTM</th><th>Hisabati</th><th>Kiswahili</th><th>Sayansi</th><th>Uraia</th><th>English</th><th>Jumla</th><th>Wastani</th><th>Grade</th><th>Rank</th></tr>'+byNo.map(s=>'<tr><td>'+s.candidateNo+'</td><td>'+s.name+'</td>'+s.marks.map(m=>'<td>'+m+'</td>').join("")+'<td><b>'+s.total+'</b></td><td>'+s.avg.toFixed(1)+'</td><td><b>'+s.overall+'</b></td><td>'+rankMap[s.id]+'</td></tr>').join("")+'</table>';
+}
+function printReport(){ let yr=document.getElementById("stuYear").value, sh=document.getElementById("stuShule").value, cl=document.getElementById("stuClass").value; if(!sh||!cl) return alert("Chagua Shule na Darasa"); let school=getShule(+sh); let list=DB.wanafunzi.filter(x=>x.shuleId==+sh&&x.class==cl&&x.year==yr).map(enrich); if(!list.length) return alert("Hakuna wanafunzi"); document.getElementById("printArea").innerHTML=buildPrintHTML(school,cl,list,yr); document.getElementById("printArea").style.display="block"; window.print(); setTimeout(()=>{ document.getElementById("printArea").style.display="none"; },500); }
+function printReportFromResults(){ let lvl=document.getElementById("resLevel").value, f=document.getElementById("resFilter").value, cls=document.getElementById("resClass").value, yr=document.getElementById("resYear").value; if(!cls) return alert("Chagua Darasa"); if(lvl!="shule"){ alert("Chagua Tazama kwa = Shule"); return; } document.getElementById("stuYear").value=yr; document.getElementById("stuShule").value=f; document.getElementById("stuClass").value=cls; printReport(); }
+function printSchoolView(){ let sh=document.getElementById("svShule").value, cl=document.getElementById("svClass").value, yr=document.getElementById("svYear").value; if(!sh||!cl) return alert("Chagua Shule na Darasa"); let school=getShule(+sh); let list=DB.wanafunzi.filter(x=>x.shuleId==+sh&&x.class==cl&&x.year==yr).map(enrich); document.getElementById("printArea").innerHTML=buildPrintHTML(school,cl,list,yr); document.getElementById("printArea").style.display="block"; window.print(); setTimeout(()=>{ document.getElementById("printArea").style.display="none"; },500); }
+function exportBackup(){ let data={exportedAt:new Date().toISOString(),wilaya:"KALAMBO",adminName:DB.admin.name,adminEmail:DB.admin.email,db:DB}; let blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"}); let a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="KALAMBO_Backup_"+new Date().toISOString().slice(0,10)+".json"; a.click(); DB.lastBackup=new Date().toLocaleString("sw-TZ"); saveOnly(); renderBackup(); alert("✅ Backup imepakuliwa!"); }
+function importBackup(event){
+let file=event.target.files[0]; if(!file) return; let reader=new FileReader();
+reader.onload=function(e){ try{ let parsed=JSON.parse(e.target.result); let newDB=parsed.db||parsed; if(!newDB.tarafa||!newDB.wanafunzi) throw new Error("Faili si ya Kalambo"); if(!confirm("Rudisha Backup hii?")) return; DB=newDB; if(!DB.admin) DB.admin={name:"Promise daud",email:"kalambo@gmail.com",password:"kalambo",pic:""}; DB.lastBackup="Imerejeshwa: "+new Date().toLocaleString("sw-TZ"); saveOnly(); initAll(); alert("✅ Backup imerudishwa!"); }catch(err){ alert("❌ "+err.message); } event.target.value=""; };
+reader.readAsText(file);
+}
+function restoreAutoBackup(){ let ab=null; try{ab=localStorage.getItem("KALAMBO_AUTO");}catch(e){} if(!ab) return alert("Hakuna nakala ya dharura."); if(!confirm("Rudisha nakala ya dharura?")) return; try{ DB=JSON.parse(ab); saveOnly(); initAll(); alert("✅ Nakala ya dharura imerudishwa."); }catch(e){ alert("Imeshindikana."); } }
+function exportCSV(){ let yr=document.getElementById("bkYear").value, cls=document.getElementById("bkClass").value; let list=DB.wanafunzi.map(enrich).filter(x=>!yr||x.year==yr).filter(x=>!cls||x.class==cls).sort((a,b)=>b.avg-a.avg); let csv="Nafasi,Namba,Jina,Tarafa,Kata,Shule,Darasa,Mwaka,HTM,Hisabati,Kiswahili,Sayansi,Uraia,English,Jumla,Wastani,Grade\n"+list.map((s,i)=>[i+1,s.candidateNo,s.name,s.tarafaName,s.kataName,s.shuleName,s.class,s.year,...s.marks,s.total,s.avg.toFixed(1),s.overall].join(",")).join("\n"); let a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv"})); a.download="KALAMBO_matokeo.csv"; a.click(); }
+
+// ===== RENDERS =====
+function renderDash(){
+let dy=document.getElementById("dashYear").value, dc=document.getElementById("dashClass").value;
+let all=DB.wanafunzi.map(enrich); let filt=all.filter(x=>!dy||x.year==dy).filter(x=>!dc||x.class==dc);
+document.getElementById("dashStats").innerHTML='<div class="stat"><small>Tarafa</small><br><b>'+DB.tarafa.length+'</b></div><div class="stat"><small>Kata</small><br><b>'+DB.kata.length+'</b></div><div class="stat"><small>Shule</small><br><b>'+DB.shule.length+'</b></div><div class="stat"><small>Wanafunzi - '+dy+'</small><br><b>'+filt.length+'</b></div><div class="stat"><small>Wastani Wilaya</small><br><b>'+avgOf(filt).toFixed(1)+'</b></div><div class="stat"><small>% Ufaulu</small><br><b>'+(filt.length?Math.round(filt.filter(x=>x.avg>=45).length/filt.length*100):0)+'%</b></div>';
+document.getElementById("dashSummary").innerHTML=filt.length?'<b>Bora:</b> '+[...filt].sort((a,b)=>b.avg-a.avg)[0].name+' - '+[...filt].sort((a,b)=>b.avg-a.avg)[0].shuleName:"Hakuna data. Nenda Page 2 usajili.";
+let tR=DB.tarafa.map(t=>{ let ss=filt.filter(x=>x.tarafaId==t.id); return {name:t.name,avg:avgOf(ss),count:ss.length}; }).sort((a,b)=>b.avg-a.avg);
+document.getElementById("dashByClass").innerHTML='<table><tr><th>#</th><th>Tarafa</th><th>Wastani</th><th>Wanafunzi</th></tr>'+tR.map((x,i)=>'<tr><td>'+(i+1)+'</td><td>'+x.name+'</td><td>'+x.avg.toFixed(1)+'</td><td>'+x.count+'</td></tr>').join("")+'</table>';
+}
+function renderStudentList(){
+let yr=document.getElementById("stuYear").value, sh=document.getElementById("stuShule").value, cl=document.getElementById("stuClass").value;
+if(!sh||!cl){ document.getElementById("studentList").innerHTML=""; return; }
+let list=DB.wanafunzi.filter(x=>x.shuleId==+sh&&x.class==cl&&x.year==yr).map(enrich); let rm=rankOf(list);
+let byNo=[...list].sort((a,b)=>String(a.candidateNo).localeCompare(String(b.candidateNo)));
+document.getElementById("studentList").innerHTML='<h4>Wanafunzi - '+getShule(+sh).name+' - '+cl+' - Mwaka '+yr+' ('+list.length+')</h4><table><tr><th>Namba</th><th>Jina</th><th>Jumla</th><th>Wastani</th><th>Grade</th><th>Rank</th><th>Hatua</th></tr>'+byNo.map(s=>'<tr><td><b>'+s.candidateNo+'</b></td><td><b>'+s.name+'</b></td><td>'+s.total+'</td><td>'+s.avg.toFixed(1)+'</td><td><span class="badge '+s.overall+'">'+s.overall+'</span></td><td>'+rm[s.id]+'</td><td><button class="btn orange small" onclick="editStudent('+s.id+')">✏️ Hariri</button> <button class="btn red small" onclick="delStudent('+s.id+')">Futa</button></td></tr>').join("")+'</table>';
+}
+function renderResults(){
+let yr=document.getElementById("resYear").value, cls=document.getElementById("resClass").value;
+if(!cls){ document.getElementById("resultsTable").innerHTML="<p>Chagua Mwaka na Darasa.</p>"; return; }
+let lvl=document.getElementById("resLevel").value, f=document.getElementById("resFilter").value, q=(document.getElementById("resSearch").value||"").toLowerCase(), gf=document.getElementById("resGrade").value, pf=document.getElementById("resPass").value;
+let list=filterStudents(lvl,f,cls,yr).filter(x=>x.name.toLowerCase().includes(q)||String(x.candidateNo).toLowerCase().includes(q));
+if(gf) list=list.filter(x=>x.overall==gf); if(pf=="pass") list=list.filter(x=>x.avg>=45); if(pf=="fail") list=list.filter(x=>x.avg<45);
+let rm=rankOf(list); list.sort((a,b)=>b.avg-a.avg);
+document.getElementById("resultsTable").innerHTML='<div class="kpi"><div><b>'+list.length+'</b> wanafunzi</div><div>Mwaka <b>'+yr+'</b></div><div>Darasa <b>'+cls+'</b></div><div>Wastani <b>'+avgOf(list).toFixed(1)+'</b></div></div><div style="overflow:auto;"><table><tr><th>Rank</th><th>Namba</th><th>Jina</th><th>Tarafa</th><th>Kata</th><th>Shule</th><th>HTM</th><th>Hisabati</th><th>Kiswahili</th><th>Sayansi</th><th>Uraia</th><th>English</th><th>Jumla</th><th>Wastani</th><th>Grade</th><th>Hariri</th></tr>'+list.map(s=>'<tr><td><b>'+rm[s.id]+'</b></td><td><b>'+s.candidateNo+'</b></td><td><b>'+s.name+'</b></td><td>'+s.tarafaName+'</td><td>'+s.kataName+'</td><td>'+s.shuleName+'</td>'+s.marks.map((m,j)=>'<td>'+m+' <span class="badge '+s.grades[j]+'">'+s.grades[j]+'</span></td>').join("")+'<td><b>'+s.total+'</b></td><td>'+s.avg.toFixed(1)+'</td><td><span class="badge '+s.overall+'">'+s.overall+'</span></td><td><button class="btn orange small" onclick="editStudent('+s.id+');show(\'reg2\',document.querySelectorAll(\'nav button\')[2])">Hariri</button></td></tr>').join("")+'</table></div>';
+}
+function renderSchoolView(){
+let yr=document.getElementById("svYear").value, sh=document.getElementById("svShule").value, cl=document.getElementById("svClass").value;
+if(!sh||!cl){ document.getElementById("schoolViewTable").innerHTML="<p>Chagua Mwaka, Shule na Darasa.</p>"; return; }
+let school=getShule(+sh); let kata=getKata(school.kataId)||{}; let tarafa=getTarafa(kata.tarafaId)||{};
+let list=DB.wanafunzi.filter(x=>x.shuleId==+sh&&x.class==cl&&x.year==yr).map(enrich); let rm=rankOf(list);
+let byNo=[...list].sort((a,b)=>String(a.candidateNo).localeCompare(String(b.candidateNo)));
+document.getElementById("schoolViewTable").innerHTML='<div style="background:#f8fafc;padding:14px;border-radius:10px;"><h3>'+school.name+'</h3><p>Tarafa: '+tarafa.name+' | Kata: '+kata.name+' | Darasa: '+cl+' | Mwaka: '+yr+'</p></div><table><tr><th>Namba</th><th>Jina</th><th>Tarafa</th><th>Kata</th><th>Shule</th><th>HTM</th><th>Hisabati</th><th>Kiswahili</th><th>Sayansi</th><th>Uraia</th><th>English</th><th>Jumla</th><th>Wastani</th><th>Grade</th><th>Rank</th></tr>'+byNo.map(s=>'<tr><td><b>'+s.candidateNo+'</b></td><td><b>'+s.name+'</b></td><td>'+s.tarafaName+'</td><td>'+s.kataName+'</td><td>'+s.shuleName+'</td>'+s.marks.map((m,j)=>'<td>'+m+' <span class="badge '+s.grades[j]+'">'+s.grades[j]+'</span></td>').join("")+'<td><b>'+s.total+'</b></td><td>'+s.avg.toFixed(1)+'</td><td><span class="badge '+s.overall+'">'+s.overall+'</span></td><td><b>'+rm[s.id]+'</b></td></tr>').join("")+'</table>';
+}
+function renderRank(){
+let yr=document.getElementById("rankYear").value, cls=document.getElementById("rankClass").value;
+if(!cls){ document.getElementById("top10").innerHTML="<p>Chagua Mwaka na Darasa.</p>"; document.getElementById("bottom10").innerHTML=""; document.getElementById("schoolRank").innerHTML=""; document.getElementById("kataRank").innerHTML=""; document.getElementById("tarafaRank").innerHTML=""; document.getElementById("fullRank").innerHTML=""; return; }
+let lvl=document.getElementById("rankLevel").value, f=document.getElementById("rankFilter").value;
+let list=filterStudents(lvl,f,cls,yr); list.sort((a,b)=>b.avg-a.avg);
+let top=list.slice(0,10), bot=[...list].reverse().slice(0,10);
+document.getElementById("top10").innerHTML='<h4>10 Bora - '+yr+' '+cls+'</h4><table><tr><th>Rank</th><th>Namba</th><th>Jina</th><th>Shule</th><th>Wastani</th></tr>'+top.map((s,i)=>'<tr><td>'+(i+1)+'</td><td>'+s.candidateNo+'</td><td>'+s.name+'</td><td>'+s.shuleName+'</td><td>'+s.avg.toFixed(1)+'</td></tr>').join("")+'</table>';
+document.getElementById("bottom10").innerHTML='<h4>10 Hafifu</h4><table><tr><th>Rank</th><th>Namba</th><th>Jina</th><th>Shule</th><th>Wastani</th></tr>'+bot.map((s,i)=>'<tr><td>'+(list.length-9+i)+'</td><td>'+s.candidateNo+'</td><td>'+s.name+'</td><td>'+s.shuleName+'</td><td>'+s.avg.toFixed(1)+'</td></tr>').join("")+'</table>';
+let schools=DB.shule.map(sh=>{ let ss=DB.wanafunzi.filter(x=>x.shuleId==sh.id&&x.class==cls&&x.year==yr).map(enrich); let ka=getKata(sh.kataId)||{}; let ta=getTarafa(ka.tarafaId)||{}; return {name:sh.name,kata:ka.name||"",tarafa:ta.name||"",count:ss.length,avg:avgOf(ss),pass:ss.length?Math.round(ss.filter(x=>x.avg>=45).length/ss.length*100):0}; }).sort((a,b)=>b.avg-a.avg);
+document.getElementById("schoolRank").innerHTML='<table><tr><th>Nafasi</th><th>Shule</th><th>Tarafa / Kata</th><th>Wanafunzi</th><th>Wastani</th><th>% Ufaulu</th></tr>'+schools.map((s,i)=>'<tr><td>'+(i+1)+'</td><td><b>'+s.name+'</b></td><td>'+s.tarafa+' / '+s.kata+'</td><td>'+s.count+'</td><td>'+s.avg.toFixed(1)+'</td><td>'+s.pass+'%</td></tr>').join("")+'</table>';
+let kr=DB.kata.map(k=>{ let ss=DB.wanafunzi.map(enrich).filter(x=>x.kataId==k.id&&x.class==cls&&x.year==yr); return {name:k.name,avg:avgOf(ss)}; }).sort((a,b)=>b.avg-a.avg);
+let tr=DB.tarafa.map(t=>{ let ss=DB.wanafunzi.map(enrich).filter(x=>x.tarafaId==t.id&&x.class==cls&&x.year==yr); return {name:t.name,avg:avgOf(ss)}; }).sort((a,b)=>b.avg-a.avg);
+document.getElementById("kataRank").innerHTML='<h4>Kata</h4><table><tr><th>#</th><th>Kata</th><th>Wastani</th></tr>'+kr.map((k,i)=>'<tr><td>'+(i+1)+'</td><td>'+k.name+'</td><td>'+k.avg.toFixed(1)+'</td></tr>').join("")+'</table>';
+document.getElementById("tarafaRank").innerHTML='<h4>Tarafa</h4><table><tr><th>#</th><th>Tarafa</th><th>Wastani</th></tr>'+tr.map((k,i)=>'<tr><td>'+(i+1)+'</td><td>'+k.name+'</td><td>'+k.avg.toFixed(1)+'</td></tr>').join("")+'</table>';
+document.getElementById("fullRank").innerHTML='<table><tr><th>Rank</th><th>Namba</th><th>Jina</th><th>Tarafa</th><th>Kata</th><th>Shule</th><th>Wastani</th></tr>'+list.map((s,i)=>'<tr><td>'+(i+1)+'</td><td>'+s.candidateNo+'</td><td>'+s.name+'</td><td>'+s.tarafaName+'</td><td>'+s.kataName+'</td><td>'+s.shuleName+'</td><td>'+s.avg.toFixed(1)+'</td></tr>').join("")+'</table>';
+}
+function renderSubjects(){
+let yr=document.getElementById("subYear").value, cls=document.getElementById("subClass").value;
+if(!cls){ document.getElementById("subjectTable").innerHTML="<p>Chagua Mwaka na Darasa.</p>"; document.getElementById("subjectTop").innerHTML=""; document.getElementById("subjectBestArea").innerHTML=""; return; }
+let lvl=document.getElementById("subLevel").value, f=document.getElementById("subFilter").value;
+let list=filterStudents(lvl,f,cls,yr);
+let rows=SUBJECTS.map((name,i)=>{ let vals=list.map(x=>x.marks[i]); let avg=vals.length?vals.reduce((a,b)=>a+b,0)/vals.length:0; let pass=vals.length?Math.round(vals.filter(v=>v>=45).length/vals.length*100):0; let best=list.length?[...list].sort((a,b)=>b.marks[i]-a.marks[i])[0]:null; return {name,full:SUBJECTS_FULL[i],avg,pass,best,idx:i}; }).sort((a,b)=>b.avg-a.avg);
+document.getElementById("subjectTable").innerHTML='<h4>Ufaulu - '+yr+' '+cls+' '+lvl+' ('+list.length+')</h4><table><tr><th>Nafasi</th><th>Somo</th><th>Wastani</th><th>% Ufaulu</th><th>Grade</th><th>Bora</th></tr>'+rows.map((r,i)=>'<tr><td>'+(i+1)+'</td><td><b>'+r.name+'</b></td><td>'+r.avg.toFixed(1)+'</td><td>'+r.pass+'%</td><td><span class="badge '+grade(r.avg)+'">'+grade(r.avg)+'</span></td><td>'+(r.best?r.best.name+" ("+r.best.marks[r.idx]+")":"-")+'</td></tr>').join("")+'</table>';
+document.getElementById("subjectTop").innerHTML='<h4>🏅 Bora kwa Kila Somo</h4>'+rows.map(r=>{ let top=[...list].sort((a,b)=>b.marks[r.idx]-a.marks[r.idx]).slice(0,3); return '<div style="background:#fff;padding:14px;border-radius:10px;margin-bottom:14px;"><b>'+r.name+'</b><table><tr><th>#</th><th>Namba</th><th>Jina</th><th>Shule</th><th>Alama</th></tr>'+top.map((s,i)=>'<tr><td>'+(i+1)+'</td><td>'+s.candidateNo+'</td><td>'+s.name+'</td><td>'+s.shuleName+'</td><td><b>'+s.marks[r.idx]+'</b></td></tr>').join("")+'</table></div>'; }).join("");
+let bestHtml='<h4>🏫 Shule / Kata / Tarafa Bora kwa Kila Somo</h4>';
+SUBJECTS.forEach((name,i)=>{
+let byShule=DB.shule.map(sh=>{ let ss=DB.wanafunzi.filter(x=>x.shuleId==sh.id&&x.class==cls&&x.year==yr); let avg=ss.length?ss.reduce((a,b)=>a+b.marks[i],0)/ss.length:0; return {name:sh.name,avg,count:ss.length}; }).filter(x=>x.count>0).sort((a,b)=>b.avg-a.avg)[0];
+let byKata=DB.kata.map(k=>{ let shIds=DB.shule.filter(s=>s.kataId==k.id).map(s=>s.id); let ss=DB.wanafunzi.filter(x=>shIds.includes(x.shuleId)&&x.class==cls&&x.year==yr); let avg=ss.length?ss.reduce((a,b)=>a+b.marks[i],0)/ss.length:0; return {name:k.name,avg,count:ss.length}; }).filter(x=>x.count>0).sort((a,b)=>b.avg-a.avg)[0];
+let byTarafa=DB.tarafa.map(t=>{ let kIds=DB.kata.filter(k=>k.tarafaId==t.id).map(k=>k.id); let shIds=DB.shule.filter(s=>kIds.includes(s.kataId)).map(s=>s.id); let ss=DB.wanafunzi.filter(x=>shIds.includes(x.shuleId)&&x.class==cls&&x.year==yr); let avg=ss.length?ss.reduce((a,b)=>a+b.marks[i],0)/ss.length:0; return {name:t.name,avg,count:ss.length}; }).filter(x=>x.count>0).sort((a,b)=>b.avg-a.avg)[0];
+bestHtml+='<div style="background:#fff;padding:14px;border-radius:10px;margin-bottom:14px;"><b>'+name+'</b><table><tr><th>Kiwango</th><th>Bora</th><th>Wastani</th></tr><tr><td>Shule</td><td><b>'+(byShule?byShule.name:"-")+'</b></td><td>'+(byShule?byShule.avg.toFixed(1):"-")+'</td></tr><tr><td>Kata</td><td><b>'+(byKata?byKata.name:"-")+'</b></td><td>'+(byKata?byKata.avg.toFixed(1):"-")+'</td></tr><tr><td>Tarafa</td><td><b>'+(byTarafa?byTarafa.name:"-")+'</b></td><td>'+(byTarafa?byTarafa.avg.toFixed(1):"-")+'</td></tr></table></div>';
+});
+document.getElementById("subjectBestArea").innerHTML=bestHtml;
+}
+function renderBackup(){
+document.getElementById("bkTarafa").textContent=DB.tarafa.length; document.getElementById("bkKata").textContent=DB.kata.length; document.getElementById("bkShule").textContent=DB.shule.length; document.getElementById("bkWanafunzi").textContent=DB.wanafunzi.length; document.getElementById("bkYears").textContent=DB.years.join(", "); document.getElementById("bkLast").textContent=DB.lastBackup||"Bado";
+let autoSize="Hakuna bado"; try{ let a=localStorage.getItem("KALAMBO_AUTO"); if(a) autoSize="Nakala ipo - "+Math.round(a.length/1024)+" KB"; }catch(e){}
+document.getElementById("autoBackupInfo").textContent=autoSize;
+}
+function initAll(){
+fillYearSelects(); updateAvatars(); fillStaticSelects(); renderPage1(); renderDash(); renderBackup();
+document.getElementById("resFilter").innerHTML=optsFor(document.getElementById("resLevel").value);
+document.getElementById("rankFilter").innerHTML=optsFor(document.getElementById("rankLevel").value);
+document.getElementById("subFilter").innerHTML=optsFor(document.getElementById("subLevel").value);
+onClassChange();
+}
+if(isLogged()){ document.getElementById("loginScreen").style.display="none"; initAll(); } else { document.getElementById("loginScreen").style.display="flex"; initAll(); }
+</script>
+</body>
+</html>
